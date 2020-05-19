@@ -1,16 +1,18 @@
 FROM alpine:latest
-RUN apk add --no-cache alpine-sdk git python3 python3-virtualenv python3-pip && \
+MAINTAINER Steve Cirelli "steve@cirelli.org"
+
+RUN apk add --no-cache alpine-sdk git python3 && \
     cd /opt && \
-        git clone https://github.com/0cjs/8bitdev.git && \
+        git clone https://github.com/scirelli/8bitdev.git && \
     cd 8bitdev && \
         python3 -m venv --prompt 8bitdev ./.venv && \
-            . .venv/bin/activate && \
-            pip3 install --upgrade pip && \
-            pip3 install -r requirements.txt && \
-            BUILDDIR=/opt/8bitdev/build python3 ./tool/asl/Setup && \
+            ./.venv/bin/python3 -m pip install --upgrade pip && \
+            ./.venv/bin/pip install -r requirements.txt && \
+            BUILDDIR=/opt/8bitdev/build ./.venv/bin/python3 ./tool/asl/Setup && \
+            ln -s /opt/8bitdev/build/tool/bin/asl /usr/local/bin/asl && \
     echo 'clean up' && \
-        rm -rf .venv && \
-        apk del alpine-sdk git python3 python3-virtualenv python3-pip && \
+        rm -rf .venv .git && \
+        apk del alpine-sdk git python3 && \
     echo 'done'
 
-ENTRYPOINT ["sh"]
+ENTRYPOINT ["asl", "-cpu", "68000"]
