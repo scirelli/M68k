@@ -1,9 +1,13 @@
+### Setup Instructions
+* https://darkdust.net/writings/megadrive/crosscompiler
 
 ### Home page
 * http://www.gnu.org/software/binutils/
 
 ### Source zips
 * http://ftp.gnu.org/gnu/binutils/
+* https://ftp.gnu.org/gnu/gcc/
+* https://gcc.gnu.org/git.html
 
 ### Newlib
 * https://sourceware.org/newlib/
