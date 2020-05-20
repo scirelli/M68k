@@ -3,25 +3,26 @@ MAINTAINER Steve Cirelli "steve@cirelli.org"
 
 ARG BINUTILS_BASE=binutils-2.16.1
 ARG BINUTILS=${BINUTILS_BASE}a.tar.bz2
-ARG TAR_FLAGS=xvfj
-ARG GCC=gcc-10.1.0.tar.gz
+ARG BINUTILS_TAR_FLAGS=xvfj
+ARG GCC_BASE=gcc-3.4.3
+ARG GCC=${GCC_BASE}.tar.bz2
+ARG GCC_TAR_FLAGS=xvfj
 
-RUN apk add --no-cache alpine-sdk git wget gmp mpfr4 mpc && \
+ENV INSTALL_PACKAGES='alpine-sdk git wget'
+
+RUN apk add --no-cache $INSTALL_PACKAGES && \
     cd /tmp && \
         wget https://ftp.gnu.org/gnu/binutils/$BINUTILS && \
-        tar $TAR_FLAGS $BINUTILS && \
+        tar $BINUTILS_TAR_FLAGS $BINUTILS && \
     cd $BINUTILS_BASE && \
         export CROSSDIRECTORY=/opt/m68k && \
         CFLAGS=-Wno-error ./configure --prefix=$CROSSDIRECTORY --target=m68k-coff --enable-obsolete && \
         make && make install && \
     cd /tmp && \
-        wget https://ftp.gnu.org/gnu/gcc/gcc-10.1.0/$GCC && \
-        tar xvfz $GCC && \
-    cd gcc-10.1.0 && \
-        ./contrib/download_prerequisites && \
-        mkdir /tmp/objdir && \
-        cd /tmp/objdir && \
-        /tmp/gcc-10.1.0/configure --prefix=$CROSSDIRECTORY --target=m68k-coff --enable-languages=c && \
+        wget https://ftp.gnu.org/gnu/gcc/$GCC_BASE/$GCC && \
+        tar $GCC_TAR_FLAGS $GCC && \
+    cd $GCC_BASE && \
+        ./configure --prefix=$CROSSDIRECTORY --target=m68k-coff --enable-languages=c && \
         PATH=$PATH:$CROSSDIRECTORY/bin make && \
         PATH=$PATH:$CROSSDIRECTORY/bin make install && \
     cat 'export PATH=$PATH:/opt/m68k/bin' >> /etc/profile && \
@@ -29,7 +30,7 @@ RUN apk add --no-cache alpine-sdk git wget gmp mpfr4 mpc && \
         cd /tmp && \
         rm -rf /tmp/binutils-gdb && \
         rm -rf /tmp/gcc && \
-        apk del alpine-sdk git wget gmp mpfr-dev mpc && \
+        apk del $INSTALL_PACKAGES && \
     echo 'done'
 
 ENTRYPOINT ["m68k-coff-gcc"]
