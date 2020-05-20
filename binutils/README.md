@@ -14,3 +14,7 @@
 
 ### References
 * https://stackoverflow.com/a/11642624/808603
+
+### Gitrepos
+* https://sourceware.org/git/binutils-gdb
+* https://gcc.gnu.org/git/gcc.git

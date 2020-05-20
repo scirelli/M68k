@@ -1,17 +1,27 @@
 FROM alpine:latest
 MAINTAINER Steve Cirelli "steve@cirelli.org"
 
-RUN apk add --no-cache alpine-sdk git wget && \
+ARG BINUTILS_BASE=binutils-2.16.1
+ARG BINUTILS=${BINUTILS_BASE}a.tar.bz2
+ARG TAR_FLAGS=xvfj
+ARG GCC=gcc-10.1.0.tar.gz
+
+RUN apk add --no-cache alpine-sdk git wget gmp mpfr4 mpc && \
     cd /tmp && \
-        git clone --depth=1 https://sourceware.org/git/binutils-gdb.git && \
-    cd binutils-gdb && \
+        wget https://ftp.gnu.org/gnu/binutils/$BINUTILS && \
+        tar $TAR_FLAGS $BINUTILS && \
+    cd $BINUTILS_BASE && \
         export CROSSDIRECTORY=/opt/m68k && \
-        ./configure --prefix=$CROSSDIRECTORY --target=m68k-coff && \
+        CFLAGS=-Wno-error ./configure --prefix=$CROSSDIRECTORY --target=m68k-coff --enable-obsolete && \
         make && make install && \
     cd /tmp && \
-        git clone --depth=1 https://gcc.gnu.org/git/gcc.git && \
-    cd gcc && \
-        configure --prefix=$CROSSDIRECTORY --target=m68k-coff --enable-languages=c && \
+        wget https://ftp.gnu.org/gnu/gcc/gcc-10.1.0/$GCC && \
+        tar xvfz $GCC && \
+    cd gcc-10.1.0 && \
+        ./contrib/download_prerequisites && \
+        mkdir /tmp/objdir && \
+        cd /tmp/objdir && \
+        /tmp/gcc-10.1.0/configure --prefix=$CROSSDIRECTORY --target=m68k-coff --enable-languages=c && \
         PATH=$PATH:$CROSSDIRECTORY/bin make && \
         PATH=$PATH:$CROSSDIRECTORY/bin make install && \
     cat 'export PATH=$PATH:/opt/m68k/bin' >> /etc/profile && \
@@ -19,7 +29,7 @@ RUN apk add --no-cache alpine-sdk git wget && \
         cd /tmp && \
         rm -rf /tmp/binutils-gdb && \
         rm -rf /tmp/gcc && \
-        apk del alpine-sdk git wget && \
+        apk del alpine-sdk git wget gmp mpfr-dev mpc && \
     echo 'done'
 
 ENTRYPOINT ["m68k-coff-gcc"]
