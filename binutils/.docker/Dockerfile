@@ -1,10 +1,10 @@
-FROM alpine:latest
+FROM i386/alpine:latest
 MAINTAINER Steve Cirelli "steve@cirelli.org"
 
 ARG BINUTILS_BASE=binutils-2.16.1
 ARG BINUTILS=${BINUTILS_BASE}a.tar.bz2
 ARG BINUTILS_TAR_FLAGS=xvfj
-ARG GCC_BASE=gcc-3.4.3
+ARG GCC_BASE=gcc-3.4.6
 ARG GCC=${GCC_BASE}.tar.bz2
 ARG GCC_TAR_FLAGS=xvfj
 
@@ -25,11 +25,11 @@ RUN apk add --no-cache $INSTALL_PACKAGES && \
         ./configure --prefix=$CROSSDIRECTORY --target=m68k-coff --enable-languages=c && \
         PATH=$PATH:$CROSSDIRECTORY/bin make && \
         PATH=$PATH:$CROSSDIRECTORY/bin make install && \
-    cat 'export PATH=$PATH:/opt/m68k/bin' >> /etc/profile && \
+    echo 'export PATH=$PATH:/opt/m68k/bin' >> /etc/profile && \
     echo 'clean up' && \
         cd /tmp && \
-        rm -rf /tmp/binutils-gdb && \
-        rm -rf /tmp/gcc && \
+        rm -rf /tmp/binutils* && \
+        rm -rf /tmp/gcc* && \
         apk del $INSTALL_PACKAGES && \
     echo 'done'
 
