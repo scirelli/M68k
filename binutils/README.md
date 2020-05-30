@@ -1,6 +1,11 @@
 ### Setup Instructions
 * https://darkdust.net/writings/megadrive/crosscompiler
 
+```
+docker run --rm -it --entrypoint sh -v /tmp/t:/tmp/t m68k-coff-gcc:latest
+docker run --rm asl:latest /tmp/t/gamehut.s
+```
+
 ### Home page
 * http://www.gnu.org/software/binutils/
 

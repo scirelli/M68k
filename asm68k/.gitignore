@@ -1,0 +1,4 @@
+.wine-0
+*.bin
+*.sym
+/bin

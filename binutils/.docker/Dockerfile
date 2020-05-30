@@ -26,6 +26,8 @@ RUN apk add --no-cache $INSTALL_PACKAGES && \
         PATH=$PATH:$CROSSDIRECTORY/bin make && \
         PATH=$PATH:$CROSSDIRECTORY/bin make install && \
     echo 'export PATH=$PATH:/opt/m68k/bin' >> /etc/profile && \
+    ln -s /opt/m68k/bin/* /usr/local/bin/ && \
+    echo alias ll='ls -lah' >> /etc/profile.d/aliases.sh
     echo 'clean up' && \
         cd /tmp && \
         rm -rf /tmp/binutils* && \
