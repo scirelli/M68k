@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+WIN_BASE='C:\users\root\My Documents\project'
+
 lsof -i TCP:6000 > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     # You might just want to run this in another shell instead of bringing it up and down.
