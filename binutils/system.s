@@ -125,7 +125,7 @@ USERRAM:	RS.B	0
 		DC.L	ENDSTACK		;STACK POINTER
 		DC.L	CODESTART		;PROGRAM COUNTER
 
-		ORG	$0068
+		ORG	$0068               ; ORG - Absolute origin. Changes the PC to the value specified by the expression in it's operand field. Subsequent statements are assigned absolute memory locations starting with the new PC value.
 
 		DC.L	EXTINT
 		DC.L	ERROR
