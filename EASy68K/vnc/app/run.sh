@@ -8,4 +8,4 @@ docker run \
     --volume=easy68kv2-data:/data \
     --volume="$project":/Projects \
     --net=easy68k-net \
-    easy68kv2
+    scirelli/easy68kv2-app

@@ -11,17 +11,19 @@ services:
       - "8080:8080"
     networks:
       - easy68k-net
+    restart: always
     volumes:
       - "easy68kv2-data:/data"
     labels:
       org.cirelli.easy68kv2.web: "EASy68Kv2-Web"
     environment:
-      - APP_USERNAME="cirelli"
-      - APP_PASSWORD_HASH="JDJhJDEwJHNoVHNma0JDbVRpcE8wcjZob3hjcU85T1U1aG5yN3lSbC9VM1dOZkV1bGNiczVFeVBZbi9H"
+      - APP_USERNAME=cirelli
+      - APP_PASSWORD_HASH=JDJhJDEwJHRKRE9HQllDR3F3S29PVUZmek9RNnVncGRIelJhSnhvbnFSVHphYlBNN20zQUNtV3ZacWw2
 
   easy68kv2-app:
     container_name: easy68kv2-app
     image: scirelli/easy68kv2-app
+    restart: always
     volumes:
       - easy68kv2-data:/data
       - "${SRC_DIR}:/mnt/Projects"

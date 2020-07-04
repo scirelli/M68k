@@ -10,4 +10,4 @@ docker run \
     --env=APP_USERNAME="$USER" \
     --env=APP_PASSWORD_HASH="$hashp" \
     --publish=8080:8080 \
-    easy68kv2-caddy
+    scirelli/easy68kv2-caddy
